@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="it">
+
+<head>
+   <meta charset="UTF-8">
+   <meta http-equiv="X-UA-Compatible" content="IE=edge">
+   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta2/css/all.min.css">
+   <link rel="stylesheet" media="screen and (min-device-width: 800px)" href="./styles/style.css">
+   <title>sign up e login</title>
+</head>
+
+<body>
+
+   <div id="formcontainer" class="popout">
+
+      <form id="myform" class="form" action="./registration.php" method="post">
+         <div class="txt-c">
+            <h3>Sign <span class="text-weight">up !</span> </h3>
+         </div>
+         <input type="text" name="name" placeholder="Name">
+         <input type="email" name="email" placeholder="Email">
+
+         <div class="inputcontainer">
+            <input type="password" name="password" placeholder="Password">
+            <span><i class="fa-regular fa-eye icon" id="visible"></i></span>
+         </div>
+
+         <input type="submit" value="Sign Up!" name="submit">
+
+         <div class="undertext">
+            <p id="switch"><a href="#">Already registered? <b>Login!</b></a></p>
+         </div>
+      </form>
+
+      <form id="login" class="form" action="./login.php" method="post">
+         <div class="txt-c">
+            <h3>Log<span class="text-weight">in !</span> </h3>
+         </div>
+
+         <input type="email" name="email" placeholder="Email">
+
+         <div class="inputcontainer">
+            <input type="password" name="password" placeholder="Password">
+            <span><i class="fa-regular fa-eye icon" id="visible2"></i></span>
+         </div>
+
+         <input type="submit" value="Login!" name="submit">
+
+         <div class="undertext">
+            <p id="switch2"><a href="#">Don't you have an account? <b>Sign-up!</b></a></p>
+         </div>
+      </form>
+
+
+   </div>
+
+   <div id="openform">
+      <i class="far fa-envelope" id="openform-icon"></i>
+   </div>
+
+   <script src="./library/scriptLibrary.js"></script>
+   <script src="./scripts/script.js"></script>
+</body>
+
+</html>
