@@ -19,7 +19,7 @@ if (isset($_POST['email'], $_POST['password'])) {
          $_SESSION['role'] = $row[0]['role'];
          $_SESSION['email'] = $email;
          $_SESSION['name'] = $row[0]['name'];
-         //header('Location: ./media.php');
+         header('Location: ./media.php');
          var_dump($_SESSION);
       } else {
          header('Location: ./index.html');
