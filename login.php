@@ -1,12 +1,12 @@
 <?php
-
+ob_start();
 require_once('./controller/db_connect.php');
 
 use crudframework\Db_control;
 
 if (isset($_POST['email'], $_POST['password'])) {
    $password = $_POST['password'];
-   $email = $_POST['email'];
+   $email = strtolower($_POST['email']);
    $dbc = new Db_control();
    $control = $dbc->password_control($email, $password);
    var_dump($control);
@@ -19,7 +19,7 @@ if (isset($_POST['email'], $_POST['password'])) {
          $_SESSION['role'] = $row[0]['role'];
          $_SESSION['email'] = $email;
          $_SESSION['name'] = $row[0]['name'];
-         header('Location: ./media.php');
+         header('Location: ./player');
          var_dump($_SESSION);
       } else {
          header('Location: ./index.html');
