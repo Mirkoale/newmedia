@@ -1,8 +1,8 @@
 <?php
-include_once './modules/header.php';
-
 session_start();
 ob_start();
+include_once './modules/header.php';
+
 if (isset($_SESSION['name'],$_SESSION['role'],$_SESSION['email'])) {
 $name = $_SESSION['name']
 ?>
