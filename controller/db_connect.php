@@ -103,20 +103,48 @@ class Db_control
       }
    }
 
+   ## CONTROLLO EMAIL ##
+   private function email_validation($email){
+     return filter_var($email, FILTER_VALIDATE_EMAIL);
+   }
+
+   ##  CREA ID UNICO + CONTROLLOO  ##
+  private function unique_id(){
+   $uid = uniqid();
+      $sql = "SELECT * FROM users WHERE uniqueid = '{$uid}'";
+      $query = $this->db->prepare($sql);
+
+      if ($query->execute()) {
+         $count = $query->rowCount();
+      } else {
+         echo $query->errorInfo();
+      }
+      if($count > 0){
+         unique_id();
+      }
+      return $uid;      
+  }
+
    ##  PUSH NEL DB UTENTE REGISTRATO  ##
    public function push_user($nome, $email, $password)
    {
-      $sql = "INSERT INTO users (name, email, password) VALUES (:nome, :email, :password)";
+      if ($this->email_validation($email)) {
+         
+         $uniqueid = $this->unique_id();
+         
+         $sql = "INSERT INTO users (name, email, password, uniqueid) VALUES (:nome, :email, :password, :uniqueid)";
 
-      $query = $this->db->prepare($sql);
-      $query->bindParam(':nome', $nome, PDO::PARAM_STR);
-      $query->bindParam(':password', $password, PDO::PARAM_STR);
-      $query->bindParam(':email', $email, PDO::PARAM_STR);
+         $query = $this->db->prepare($sql);
+         $query->bindParam(':nome', $nome, PDO::PARAM_STR);
+         $query->bindParam(':password', $password, PDO::PARAM_STR);
+         $query->bindParam(':email', $email, PDO::PARAM_STR);
+         $query->bindParam(':uniqueid', $uniqueid, PDO::PARAM_STR);
 
-      if ($query->execute()) {
-         return true;
-      } else {
-         var_dump($query->errorInfo());
+         if ($query->execute()) {
+            return true;
+         } else {
+            var_dump($query->errorInfo());
+         }
       }
    }
 
