@@ -4,7 +4,7 @@ $uploadDir = __DIR__ . '\audio';
 
 $files = rearrange($_FILES);
 
-var_dump($files);
+//var_dump($files);
 
 foreach ($files as $file) {
    if (UPLOAD_ERR_OK === $file['error']) {

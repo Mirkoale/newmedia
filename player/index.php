@@ -2,6 +2,7 @@
 session_start();
 ob_start();
 include_once './modules/header.php';
+include_once './modules/cache.php';
 
 if (isset($_SESSION['name'],$_SESSION['role'],$_SESSION['email'])) {
 $name = $_SESSION['name']
