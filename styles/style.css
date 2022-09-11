@@ -78,7 +78,7 @@ div#formcontainer {
 
 }
 
-.form input[name="name"],
+.form input[name="username"],
 .form input[name="email"],
 .form input[name="password"] {
    margin-block: 7px;

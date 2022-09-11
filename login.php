@@ -13,12 +13,12 @@ if (isset($_POST['email'], $_POST['password'])) {
    if ($control) {
       $row = $dbc->find_name($email);
 
-      if (isset($row[0]['name'], $row[0]['role']) && !empty($row[0]['name']) && !empty($row[0]['role'])) {
+      if (isset($row[0]['username'], $row[0]['role']) && !empty($row[0]['username']) && !empty($row[0]['role'])) {
 
          session_start();
          $_SESSION['role'] = $row[0]['role'];
          $_SESSION['email'] = $email;
-         $_SESSION['name'] = $row[0]['name'];
+         $_SESSION['username'] = $row[0]['username'];
          header('Location: ./player');
          var_dump($_SESSION);
       } else {

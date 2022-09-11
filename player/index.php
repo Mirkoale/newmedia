@@ -4,15 +4,15 @@ ob_start();
 include_once './modules/header.php';
 include_once './modules/cache.php';
 
-if (isset($_SESSION['name'],$_SESSION['role'],$_SESSION['email'])) {
-$name = $_SESSION['name']
+if (isset($_SESSION['username'],$_SESSION['role'],$_SESSION['email'])) {
+$username = $_SESSION['username']
 ?>
 <body>
 
    <header>
 
       <div class="header">
-         <h1>MY PLAYER 1.0 di <?= strtoupper($name) ?></h1>
+         <h1>MY PLAYER 1.0 di <?= strtoupper($username) ?></h1>
       </div>
 
    </header>

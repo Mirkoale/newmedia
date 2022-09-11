@@ -61,7 +61,7 @@ class Db_control
    ##  TROVA NOME UTENTE e RUOLO  ##
    public function find_name($email)
    {
-      $sql = "SELECT name, role FROM `users` WHERE email = '{$email}'";
+      $sql = "SELECT username, role FROM `users` WHERE email = '{$email}'";
       $query = $this->db->prepare($sql);
       if ($query->execute()) {
          $result =  $query->fetchAll(PDO::FETCH_ASSOC);
@@ -90,7 +90,6 @@ class Db_control
    public function read_by_id($id)
    {
       $sql = "SELECT * FROM users WHERE id = $id";
-
       $query = $this->db->prepare($sql);
 
       if ($query->execute()) {
@@ -106,6 +105,16 @@ class Db_control
    ## CONTROLLO EMAIL ##
    private function email_validation($email){
      return filter_var($email, FILTER_VALIDATE_EMAIL);
+   }
+
+   ## CONTROLLO USERNAME ##
+   public function username_validation($username){ 
+      if (preg_match('/^[a-zA-Z][0-9a-zA-Z_]{2,23}[0-9a-zA-Z]$/', $username)) {
+         return true;
+      }else {
+         return false;
+      } 
+      
    }
 
    ##  CREA ID UNICO + CONTROLLOO  ##
@@ -126,25 +135,36 @@ class Db_control
   }
 
    ##  PUSH NEL DB UTENTE REGISTRATO  ##
-   public function push_user($nome, $email, $password)
+   public function push_user($username, $email, $password)
    {
       if ($this->email_validation($email)) {
-         
-         $uniqueid = $this->unique_id();
-         
-         $sql = "INSERT INTO users (name, email, password, uniqueid) VALUES (:nome, :email, :password, :uniqueid)";
+         if ($this->username_validation($username)) {
 
-         $query = $this->db->prepare($sql);
-         $query->bindParam(':nome', $nome, PDO::PARAM_STR);
-         $query->bindParam(':password', $password, PDO::PARAM_STR);
-         $query->bindParam(':email', $email, PDO::PARAM_STR);
-         $query->bindParam(':uniqueid', $uniqueid, PDO::PARAM_STR);
+            $uniqueid = $this->unique_id();
+            $username_format = strtolower($username);
+         
+            $sql = "INSERT INTO users (username, email, password, uniqueid) VALUES (:username, :email, :password, :uniqueid)";
 
-         if ($query->execute()) {
-            return true;
-         } else {
-            var_dump($query->errorInfo());
-         }
+            $query = $this->db->prepare($sql);
+            $query->bindParam(':username', $username_format, PDO::PARAM_STR);
+            $query->bindParam(':password', $password, PDO::PARAM_STR);
+            $query->bindParam(':email', $email, PDO::PARAM_STR);
+            $query->bindParam(':uniqueid', $uniqueid, PDO::PARAM_STR);
+
+            if ($query->execute()) {
+               return true;
+            } else {
+               var_dump($query->errorInfo());
+               return false;
+            }
+         }else {
+            echo '<p>username non valido, consentiti solo caratteri alfanumerici</p>';
+            return false;
+         }      
+         
+      }else {
+         echo '<p>email non valida</p>';
+         return false;
       }
    }
 
