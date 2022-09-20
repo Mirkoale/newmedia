@@ -30,7 +30,7 @@ $file = fopen($media, 'w');
 
 if (fwrite($file, $media_encoded) !== false) {
    echo 'PRINTED!';
-   header('location: https://creativerevolt.it/mediaplayer/?update=true');
+   header('location: ./?update=true');
 } else {
    echo 'Error';
 }

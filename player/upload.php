@@ -1,10 +1,10 @@
 <?php
 ob_start();
-$uploadDir = __DIR__ . '\audio';
 
+$uploadDir = '.\audio';
 $files = rearrange($_FILES);
 
-//var_dump($files);
+var_dump($files);
 
 foreach ($files as $file) {
    if (UPLOAD_ERR_OK === $file['error']) {
@@ -25,5 +25,5 @@ function rearrange($files)
    return $newFiles;
 }
 
-header('Location: ./index.html?upload=true ');
+header('Location: ./index.php?upload=true ');
 
