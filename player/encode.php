@@ -30,7 +30,7 @@ $file = fopen($media, 'w');
 
 if (fwrite($file, $media_encoded) !== false) {
    echo 'PRINTED!';
-   header('location: .index.php/?update=true');
+   header('location: ./?update=true');
 } else {
    echo 'Error';
 }
