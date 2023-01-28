@@ -5,18 +5,48 @@ namespace crudframework;
 use PDO;
 use PDOException;
 
+include_once '../conf/conf.php';
+
 class Db_control
 {
    private $db = '';
+   private $host;
+   private $dbname;
+   private $user;
+   private $password;
+
    public function __construct()
    {
-      $this->db = $this->connect();
+      $this->host = $this->conf('../conf/conf.json')['host'];
+      $this->dbname = $this->conf('../conf/conf.json')['dbname'];
+      $this->user = $this->conf('../conf/conf.json')['user'];
+      $this->password = $this->conf('../conf/conf.json')['password'];
+      //echo "host = " . $this->host . ", db =  " . $this->dbname . ", user = " . $this->user . " " . $this->password;
+      $this->db = $this->connect('localhost', 'userdb', 'root', '') or die('non è possibile connettersi al db');
+   }
+   public function getconf()
+   {
+      $c = array(
+         $this->host,
+         $this->dbname,
+         $this->user,
+         $this->password,
+      );
+      return $c;
    }
 
-   private function connect($hostname = 'localhost', $dbname = 'userdb', $user = 'root', $password = '')
+   public function conf($config_file)
+   {
+      $get_conf = file_get_contents($config_file);
+      $conf = json_decode($get_conf, true);
+      return $conf;
+   }
+
+
+   private function connect($hostname, $dbname, $user, $pass)
    {
       try {
-         $conn = new PDO("mysql:host=$hostname;dbname=$dbname;", $user, $password);
+         $conn = new PDO("mysql:host=$hostname;dbname=$dbname;", $user, $pass);
       } catch (PDOException $e) {
          echo 'Errore: ' . $e->getMessage();
          die();
@@ -103,23 +133,25 @@ class Db_control
    }
 
    ## CONTROLLO EMAIL ##
-   private function email_validation($email){
-     return filter_var($email, FILTER_VALIDATE_EMAIL);
+   private function email_validation($email)
+   {
+      return filter_var($email, FILTER_VALIDATE_EMAIL);
    }
 
    ## CONTROLLO USERNAME ##
-   public function username_validation($username){ 
+   public function username_validation($username)
+   {
       if (preg_match('/^[a-zA-Z][0-9a-zA-Z_]{2,23}[0-9a-zA-Z]$/', $username)) {
          return true;
-      }else {
+      } else {
          return false;
-      } 
-      
+      }
    }
 
    ##  CREA ID UNICO + CONTROLLOO  ##
-  private function unique_id(){
-   $uid = uniqid();
+   private function unique_id()
+   {
+      $uid = uniqid();
       $sql = "SELECT * FROM users WHERE uniqueid = '{$uid}'";
       $query = $this->db->prepare($sql);
 
@@ -128,11 +160,11 @@ class Db_control
       } else {
          echo $query->errorInfo();
       }
-      if($count > 0){
-         unique_id();
+      if ($count > 0) {
+         $this->unique_id();
       }
-      return $uid;      
-  }
+      return $uid;
+   }
 
    ##  PUSH NEL DB UTENTE REGISTRATO  ##
    public function push_user($username, $email, $password)
@@ -142,7 +174,7 @@ class Db_control
 
             $uniqueid = $this->unique_id();
             $username_format = strtolower($username);
-         
+
             $sql = "INSERT INTO users (username, email, password, uniqueid) VALUES (:username, :email, :password, :uniqueid)";
 
             $query = $this->db->prepare($sql);
@@ -157,12 +189,11 @@ class Db_control
                var_dump($query->errorInfo());
                return false;
             }
-         }else {
+         } else {
             echo '<p>username non valido, consentiti solo caratteri alfanumerici</p>';
             return false;
-         }      
-         
-      }else {
+         }
+      } else {
          echo '<p>email non valida</p>';
          return false;
       }
